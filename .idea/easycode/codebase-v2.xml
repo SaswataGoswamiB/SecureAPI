@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/SpringSecurity/src/main/java/com/securityImpl/security/Config/WebConfig.java;C:/Users/Admin/Downloads/SpringSecurity/SpringSecurity/src/main/java/com/securityImpl/security/Controller/ProductController.java;C:/Users/Admin/Downloads/SpringSecurity/SpringSecurity/src/main/java/com/securityImpl/security/Controller/UserController.java;C:/Users/Admin/Downloads/SpringSecurity/SpringSecurity/src/main/java/com/securityImpl/security/Controller/welcomeController.java;C:/Users/Admin/Downloads/SpringSecurity/SpringSecurity/src/main/java/com/securityImpl/security/emtities/User.java;C:/Users/Admin/Downloads/SpringSecurity/SpringSecurity/src/main/java/com/securityImpl/security/SpringSecurityApplication.java;C:/Users/Admin/Downloads/SpringSecurity/SpringSecurity/src/test/java/com/securityImpl/security/SpringSecurityApplicationTests.java" />
+  </component>
+</project>

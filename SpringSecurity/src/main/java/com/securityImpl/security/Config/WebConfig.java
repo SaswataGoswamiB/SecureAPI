@@ -18,7 +18,9 @@ public class WebConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests((request)->{
-            request.anyRequest().authenticated();
+            request.
+                    requestMatchers("user/register","user/registerall").permitAll().
+                    anyRequest().authenticated();
         })
                 .csrf((request)->{
                     HttpSecurity disable = request.disable();
