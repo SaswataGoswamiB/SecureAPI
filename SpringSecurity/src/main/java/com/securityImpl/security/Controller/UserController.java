@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController()
 @RequestMapping("/user")
@@ -26,5 +27,13 @@ public class UserController {
       user.stream().forEach((x)->{
         userrepo.save(x);
       });
+    }
+    @PostMapping("/login")
+    public String login(@RequestBody User user){
+         if(Objects.nonNull(userrepo.findByuserName(user.getUserName()))){
+                return "Logged in";
+         }
+
+         return "Please Register yourself";
     }
 }

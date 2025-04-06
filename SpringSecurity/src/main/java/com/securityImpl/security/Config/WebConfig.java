@@ -19,13 +19,15 @@ public class WebConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests((request)->{
             request.
-                    requestMatchers("user/register","user/registerall").permitAll().
+                    requestMatchers("user/register","user/login").permitAll().
                     anyRequest().authenticated();
         })
                 .csrf((request)->{
                     HttpSecurity disable = request.disable();
-                }).
-                httpBasic(Customizer.withDefaults());
+                })
+                //.formLogin(Customizer.withDefaults())
+                 // The httpBAic(Customizer.default)
+                .httpBasic(Customizer.withDefaults());
 
         return httpSecurity.build();
     }
