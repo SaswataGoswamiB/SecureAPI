@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ ")
+@RequestMapping("/Product")
 public class ProductController {
 
      List<Product> products = new ArrayList<>(List.of(

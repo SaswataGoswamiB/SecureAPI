@@ -17,35 +17,55 @@ public class WebConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests((request)->{
+//        httpSecurity.authorizeHttpRequests((request)->{
+//            request.
+//                    requestMatchers("user/register","user/login").permitAll().
+//                    anyRequest().authenticated();
+//        })
+//                .csrf((request)->{
+//                    HttpSecurity disable = request.disable();
+//                })
+//                //.formLogin(Customizer.withDefaults())
+//                 // The httpBAic(Customizer.default)
+//                .httpBasic(Customizer.withDefaults());
+//
+//        return httpSecurity.build();
+        httpSecurity.authorizeHttpRequests(request->{
             request.
-                    requestMatchers("user/register","user/login").permitAll().
+                    requestMatchers("user/login","user/register").permitAll().
                     anyRequest().authenticated();
-        })
-                .csrf((request)->{
-                    HttpSecurity disable = request.disable();
-                })
-                //.formLogin(Customizer.withDefaults())
-                 // The httpBAic(Customizer.default)
-                .httpBasic(Customizer.withDefaults());
+        }).formLogin(Customizer.withDefaults()).
+                csrf(request->{
+            request.disable();
+        }).httpBasic(Customizer.withDefaults());
 
         return httpSecurity.build();
     }
 
     @Bean
-    public UserDetailsService userdetailsservice()
-    {
-        UserDetails user1 = User.builder().
-                username("user1").password("{noop}user1password").roles("user").
-                build();
+//    public UserDetailsService userdetailsservice()
+//    {
+//        UserDetails user1 = User.builder().
+//                username("user1").password("{noop}user1password").roles("user").
+//                build();
+//
+//        UserDetails user2 = User.builder().
+//                username("user2").password("{noop}user2password").roles("user").
+//                build();
+//
+//        return new InMemoryUserDetailsManager(user1,user2);
+//    }
+// you can use the above one or this one as well.
+public UserDetailsService getuserdetails(){
 
-        UserDetails user2 = User.builder().
-                username("user2").password("{noop}user2password").roles("user").
-                build();
+        User.UserBuilder user1 = User.builder().
+                username("user1").password("{noop}user1password").roles("user");
 
-        return new InMemoryUserDetailsManager(user1,user2);
+        User.UserBuilder user2 = User.builder().
+                username("user2").password("{noop}user2password").roles("user");
+
+
+        return new InMemoryUserDetailsManager(user1.build(),user2.build());
     }
-
-
 
 }
