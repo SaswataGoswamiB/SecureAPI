@@ -1,13 +1,20 @@
 package com.securityImpl.security.Config;
 
+import com.securityImpl.security.Service.CustomUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -15,34 +22,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebConfig {
 
+    @Autowired
+   private  CustomUserService customuserservice;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.authorizeHttpRequests((request)->{
-//            request.
-//                    requestMatchers("user/register","user/login").permitAll().
-//                    anyRequest().authenticated();
-//        })
-//                .csrf((request)->{
-//                    HttpSecurity disable = request.disable();
-//                })
-//                //.formLogin(Customizer.withDefaults())
-//                 // The httpBAic(Customizer.default)
-//                .httpBasic(Customizer.withDefaults());
-//
-//        return httpSecurity.build();
-        httpSecurity.authorizeHttpRequests(request->{
-            request.
-                    requestMatchers("user/login","user/register").permitAll().
-                    anyRequest().authenticated();
-        }).formLogin(Customizer.withDefaults()).
-                csrf(request->{
-            request.disable();
-        }).httpBasic(Customizer.withDefaults());
-
-        return httpSecurity.build();
+            httpSecurity.authorizeHttpRequests((req)->{
+                req.requestMatchers("user/login","user/register").permitAll()
+            .anyRequest().authenticated();
+            }).csrf(CsrfConfigurer::disable).
+                    formLogin(Customizer.withDefaults()).
+                    httpBasic(Customizer.withDefaults());
+          return httpSecurity.build();
     }
 
-    @Bean
+    //@Bean
 //    public UserDetailsService userdetailsservice()
 //    {
 //        UserDetails user1 = User.builder().
@@ -56,6 +50,9 @@ public class WebConfig {
 //        return new InMemoryUserDetailsManager(user1,user2);
 //    }
 // you can use the above one or this one as well.
+
+//@Bean
+    //using a @Bean is mandatory here
 public UserDetailsService getuserdetails(){
 
         User.UserBuilder user1 = User.builder().
@@ -66,6 +63,20 @@ public UserDetailsService getuserdetails(){
 
 
         return new InMemoryUserDetailsManager(user1.build(),user2.build());
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder(14);
+    }
+
+    @Bean
+    public AuthenticationProvider getauthenticationprovider(){
+        DaoAuthenticationProvider authprovder = new DaoAuthenticationProvider();
+        authprovder.setUserDetailsService(customuserservice);
+        //authprovder.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        authprovder.setPasswordEncoder(bCryptPasswordEncoder());
+        return authprovder;
     }
 
 }

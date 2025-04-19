@@ -1,6 +1,7 @@
 package com.securityImpl.security.Controller;
 
 import com.securityImpl.security.Repo.Userrepo;
+import com.securityImpl.security.Service.UserService;
 import com.securityImpl.security.emtities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +18,14 @@ public class UserController {
     @Autowired
     private Userrepo userrepo;
 
+    @Autowired
+    private UserService userservice;
+
     @PostMapping("/register")
     public User register(@RequestBody User user){
-         return userrepo.save(user);
+        // return userrepo.save(user);
+
+        return  userservice.register(user);
     }
 
     @PostMapping("/registerall")

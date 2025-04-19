@@ -24,16 +24,13 @@ public class ProductController {
     {}
 
     @GetMapping
-    public List<Product> getprpducts()
-    {
+    public List<Product> getprpducts() {
         return products;
     }
 
     @PostMapping
-    public Product SaveProduct(@RequestBody Product product)
-    {
+    public Product SaveProduct(@RequestBody Product product) {
         products.add(product);
         return product;
-
-    }
+ }
 }
