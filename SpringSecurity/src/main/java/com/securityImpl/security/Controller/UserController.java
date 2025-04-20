@@ -36,10 +36,7 @@ public class UserController {
     }
     @PostMapping("/login")
     public String login(@RequestBody User user){
-         if(Objects.nonNull(userrepo.findByuserName(user.getUserName()))){
-                return "Logged in";
-         }
 
-         return "Please Register yourself";
+       return  userservice.verifyUser(user);
     }
 }
