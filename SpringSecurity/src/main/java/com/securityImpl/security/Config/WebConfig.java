@@ -55,7 +55,7 @@ public class WebConfig {
 
 //@Bean
     //using a @Bean is mandatory here
-@Bean
+//@Bean
 public UserDetailsService getuserdetails(){
 
         User.UserBuilder user1 = User.builder().
@@ -63,7 +63,6 @@ public UserDetailsService getuserdetails(){
 
         User.UserBuilder user2 = User.builder().
                 username("user2").password("{noop}user2password").roles("user");
-
 
         return new InMemoryUserDetailsManager(user1.build(),user2.build());
     }

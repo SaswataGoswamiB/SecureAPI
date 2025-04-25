@@ -3,6 +3,7 @@ package com.securityImpl.security.Service;
 import com.securityImpl.security.Repo.Userrepo;
 import com.securityImpl.security.emtities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,10 +21,13 @@ public class UserService {
 
     private AuthenticationManager authmanager;
 
-    public UserService(Userrepo userrrepo, BCryptPasswordEncoder bcryptencoder, AuthenticationManager authmanager) {
+    private final JWTService jwtservice;
+
+    public UserService(Userrepo userrrepo, BCryptPasswordEncoder bcryptencoder, AuthenticationManager authmanager, JWTService jwtservice) {
         this.userrrepo = userrrepo;
         this.bcryptencoder = bcryptencoder;
         this.authmanager = authmanager;
+        this.jwtservice = jwtservice;
     }
 
 
@@ -35,24 +39,13 @@ public class UserService {
     public String verifyUser(User user) {
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPasssword());
+        //calling thr authenticate method.
         Authentication authresult = authmanager.authenticate(authentication);
-
-    if(Objects.nonNull(userrrepo.findByuserName(user.getUserName()))){
-        return "Logged in";
+    if( authresult.isAuthenticated()){
+        return jwtservice.generateToken(user);
     }
          return "Please Register yourself";
     }
 
-//    public String verifyUser(User user) {
-//        Authentication authentication =
-//                new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPasssword());
-//        Authentication authresult = authmanager.authenticate(authentication);
-//
-//        if (authresult.isAuthenticated()) {
-//            return "Logged in";
-//        }
-//
-//        return "Please Register yourself!!";
-//    }
 
 }
