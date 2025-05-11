@@ -13,12 +13,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +26,13 @@ public class WebConfig {
     @Autowired
    private  CustomUserService customuserservice;
 
+    private final JWtAuthFilter jetauthfilter;
+
+    public WebConfig(CustomUserService customuserservice, JWtAuthFilter jetauthfilter) {
+        this.customuserservice = customuserservice;
+        this.jetauthfilter = jetauthfilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
             httpSecurity.authorizeHttpRequests((req)->{
@@ -34,7 +40,10 @@ public class WebConfig {
             .anyRequest().authenticated();
             }).csrf(CsrfConfigurer::disable).
                     formLogin(Customizer.withDefaults()).
-                    httpBasic(Customizer.withDefaults());
+                    httpBasic(Customizer.withDefaults())
+                    //here we are telling the Spring to allow the jwtfilter bfore the default Filter whihc is
+                    //UsernamePasswordAuthenticationFilter
+                    .addFilterBefore(jetauthfilter, UsernamePasswordAuthenticationFilter.class);
           return httpSecurity.build();
     }
 

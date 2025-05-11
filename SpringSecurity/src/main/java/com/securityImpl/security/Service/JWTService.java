@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -23,6 +24,8 @@ public class JWTService {
     public String generateToken(User user) {
 
         Map<String, Object> claims = new HashMap<String, Object>();
+        claims.put("Roles", "Comsumer");
+        claims.put("mail", "Testing@gm,ail.com");
         return Jwts.builder().
                 claims()
                 .add(claims)
@@ -35,8 +38,23 @@ public class JWTService {
     }
 
     private Key generateKey() {
-        String secretkey = env.getProperty("application.jwt.secretkey");
-        byte[] decode = Decoders.BASE64.decode(secretkey);
-        return Keys.hmacShaKeyFor(decode);
+//        String secretkey = env.getProperty("application.jwt.secretkey");
+//        byte[] decode = Decoders.BASE64.decode(secretkey);
+//        return Keys.hmacShaKeyFor(decode);
+
+        String property = env.getProperty("application.jwt.secretkey");
+        // Encoding the Secretket into Base64 encoding.
+        byte[] decode = Decoders.BASE64.decode(property);
+        SecretKey secretKey = Keys.hmacShaKeyFor(decode);
+        return secretKey;
+    }
+
+    public String extractusername() {
+        return "";
+    }
+
+    public boolean isTokenValid(String jwt, UserDetails userDetails) {
+
+        return true;
     }
 }

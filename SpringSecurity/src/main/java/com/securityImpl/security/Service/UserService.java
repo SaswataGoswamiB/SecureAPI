@@ -37,14 +37,25 @@ public class UserService {
     }
 
     public String verifyUser(User user) {
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPasssword());
-        //calling thr authenticate method.
-        Authentication authresult = authmanager.authenticate(authentication);
-    if( authresult.isAuthenticated()){
-        return jwtservice.generateToken(user);
-    }
-         return "Please Register yourself";
+//        Authentication authentication =
+//                new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPasssword());
+//        //calling thr authenticate method.
+//        Authentication authresult = authmanager.authenticate(authentication);
+//    if( authresult.isAuthenticated()){
+//        return jwtservice.generateToken(user);
+//    }
+//         return "Please Register yourself";
+
+        Authentication authentication = new
+                UsernamePasswordAuthenticationToken(user.getUserName(),user.getPasssword());
+
+        Authentication authenticate = authmanager.authenticate(authentication);
+
+        if(authenticate.isAuthenticated()){
+            return jwtservice.generateToken(user);
+        }
+
+        return "Please regitser yourself!!";
     }
 
 
