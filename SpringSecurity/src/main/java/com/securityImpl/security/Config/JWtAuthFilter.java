@@ -47,9 +47,9 @@ public class JWtAuthFilter extends OncePerRequestFilter {
             return ;
         }
 
-        final String jwt = authheader.substring(7);
-        // Now you  have the username.
-         final String username = jwtservice.extractusername();
+         final String jwt = authheader.substring(7);
+         // Now you  have the username.
+         final String username = jwtservice.extractusername(jwt);
 
          //getting auth object from the Secuirty Context
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -67,12 +67,16 @@ public class JWtAuthFilter extends OncePerRequestFilter {
 
                 // Set extra data to the Authentication object like IP-ADDRESS,WHO LOGGED IN,AT WHAT TIME
                 //Gives you some extra secuirty.
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                usernamePasswordAuthenticationToken.
+                        setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext()
+                        .setAuthentication(usernamePasswordAuthenticationToken);
 
             }
          }
-         else {
+
              filterChain.doFilter(request, response);
-         }
+
     }
 }
