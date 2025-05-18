@@ -41,6 +41,7 @@ public class WebConfig {
                 req.requestMatchers("/user/login","/user/register").permitAll()
             .anyRequest().authenticated();
             }).csrf(CsrfConfigurer::disable)
+                    //sesion disabled as we are implementing JWT
                     .sessionManagement(session -> session
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 🚫 No session
                     )

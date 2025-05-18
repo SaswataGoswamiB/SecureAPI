@@ -80,7 +80,9 @@ public class JWTService {
 
         Date expiration = payload.getExpiration();
 
-        // Chedck if the Expiration timke is before today
+        // Check if the Expiration time is before today
+        //Test if the Date is before the specified Date.
+
         boolean valid = expiration.before(new Date());
 
         return valid;
