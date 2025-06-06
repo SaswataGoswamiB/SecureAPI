@@ -30,7 +30,7 @@ public class WebConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
             httpSecurity.authorizeHttpRequests((req)->{
-                req.requestMatchers("user/login","user/register").permitAll()
+                req.requestMatchers("/user/login","/user/register").permitAll()
             .anyRequest().authenticated();
             }).csrf(CsrfConfigurer::disable).
                     formLogin(Customizer.withDefaults()).
