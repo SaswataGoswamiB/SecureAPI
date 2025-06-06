@@ -45,7 +45,6 @@ public class UserService {
         return jwtservice.generateToken(user);
     }
          return "Please Register yourself";
+
     }
-
-
 }

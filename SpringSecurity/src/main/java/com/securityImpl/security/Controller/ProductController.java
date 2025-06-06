@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/Product")
 public class ProductController {
 
-     List<Product> products = new ArrayList<>(List.of(
+     static List<Product> products = new ArrayList<>(List.of(
             new Product(1,"Iphone",
                     99000.0),
             new Product(2,"mac",
