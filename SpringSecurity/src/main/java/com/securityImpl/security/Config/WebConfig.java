@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class WebConfig {
 
     @Autowired
@@ -35,22 +37,35 @@ public class WebConfig {
         this.jetauthfilter = jetauthfilter;
     }
 
-    @Bean
+    /**
+     * This method is used to configure the security filter chain.
+     * It sets up the authorization rules, disables CSRF protection,
+     * and adds a custom JWT authentication filter.
+     *
+     * @param httpSecurity the HttpSecurity object to configure
+     * @return the configured SecurityFilterChain
+     * @throws Exception if an error occurs during configuration
+     */
+
+@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
             httpSecurity.authorizeHttpRequests((req)->{
                 req.requestMatchers("/user/login","/user/register").permitAll()
             .anyRequest().authenticated();
             }).csrf(CsrfConfigurer::disable)
                     //sesion disabled as we are implementing JWT
-                    .sessionManagement(session -> session
-                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 🚫 No session
-                    )
+//                    .sessionManagement(session -> session
+//                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 🚫 No session
+//                    )
+                    .sessionManagement(x->x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .formLogin(AbstractHttpConfigurer::disable)
                     // Will not be used if using JWT
                     //.httpBasic(Customizer.withDefaults())
                     //here we are telling the Spring to allow the jwtfilter bfore the default Filter whihc is
                     //UsernamePasswordAuthenticationFilter
                     .addFilterBefore(jetauthfilter, UsernamePasswordAuthenticationFilter.class);
+
+
           return httpSecurity.build();
     }
 

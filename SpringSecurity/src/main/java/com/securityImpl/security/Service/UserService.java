@@ -21,7 +21,7 @@ public class UserService {
 
     private AuthenticationManager authmanager;
 
-    private final JWTService jwtservice;
+    private final JWTService jwtservice ;
 
     public UserService(Userrepo userrrepo, BCryptPasswordEncoder bcryptencoder, AuthenticationManager authmanager, JWTService jwtservice) {
         this.userrrepo = userrrepo;
@@ -40,6 +40,7 @@ public class UserService {
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPasssword());
         //calling thr authenticate method.
+        // Usually the UsernamePasswordFilter Stays between Application Co text and the AuthenticationManager and calls the authenticate method.
         Authentication authresult = authmanager.authenticate(authentication);
     if( authresult.isAuthenticated()){
         return jwtservice.generateToken(user);
